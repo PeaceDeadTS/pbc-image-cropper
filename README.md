@@ -1,38 +1,38 @@
 # PBC Image Cropper
 
-**Image Cropper for PBC** – web‑приложение для профессиональной обрезки изображений по стандарту PBC с фиксированным соотношением сторон 2:3, поддержкой других пресетов, зума, поворота и удобного экспорта.
+**Image Cropper for PBC** is a web application for professional image cropping according to PBC standards. It focuses on a fixed 2:3 aspect ratio as the primary flow, while still supporting other aspect ratios, zoom, rotation, and convenient export.
 
-Приложение полностью клиентское (SPA на React + Vite) и готово к деплою как статический сайт.
+The app is a fully client-side SPA (React + Vite) and can be deployed as a static site.
 
 ---
 
 ## Features
 
-- **PBC Standard (2:3)** – основной сценарий, с жёстким ограничением соотношения сторон и поддержкой пресетов `Output Size`.
-- **Другие соотношения**:
-  - 16:9, 4:3, 1:1 – фиксированные пресеты.
-  - Free Form – произвольная рамка (соотношение не фиксировано).
+- **PBC Standard (2:3)** – primary workflow with a strict aspect ratio lock and support for `Output Size` presets.
+- **Additional aspect ratios**:
+  - 16:9, 4:3, 1:1 – fixed aspect ratio presets.
+  - Free Form – fully flexible crop box (no fixed aspect ratio).
 - **Output Size**:
-  - Пресеты доступны **только** в режиме PBC Standard (2:3).
-  - Во всех остальных режимах всегда используется `Original Resolution`, селектор размера отключён.
-  - Пресеты, у которых целевая высота больше исходной высоты изображения, отключены и помечены `(unavailable)`.
-- **Zoom & панорамирование**:
-  - Авто‑зу́м при загрузке – по высоте контейнера, чтобы изображение целиком помещалось по вертикали.
-  - Слайдер зума регулирует масштаб **относительно базового авто‑зума**, давая плавное управление без резких скачков.
-  - Перемещение изображения внутри рамки (drag‑to‑move).
-- **Поворот**:
-  - Кнопка поворота на +90° (циклически 0 → 90 → 180 → 270 → 0).
-- **Превью и финальное разрешение**:
-  - Панель `Cropped Preview` показывает результат кадрирования.
-  - Подпресчитанное разрешение результата соответствует реальному экспортируемому изображению.
-- **Экспорт**:
-  - Формат вывода по умолчанию совпадает с исходным файлом (`image/jpeg`, `image/png`, `image/webp`).
-  - Имя файла редактируется inline в текстовом поле.
-  - Справа от имени отображается расширение файла (`.jpg`, `.png`, `.webp`).
-  - Кнопка `Save Image` сразу скачивает файл без дополнительных модальных окон.
+  - Presets are **only available** when the aspect ratio is PBC Standard (2:3).
+  - In all other aspect ratio modes the selector is disabled and the effective behavior is always `Original Resolution`.
+  - Presets whose target height exceeds the original image height are disabled and marked with an `(unavailable)` suffix.
+- **Zoom & panning**:
+  - Automatic initial zoom on load – image height fits into the crop area container.
+  - Zoom slider controls the scale **relative to the initial auto zoom**, providing smooth control without aggressive jumps.
+  - Dragging the image inside the crop box to reposition it.
+- **Rotation**:
+  - Single button to rotate the image by +90° (cycling 0 → 90 → 180 → 270 → 0).
+- **Preview & final resolution**:
+  - The `Cropped Preview` panel always reflects exactly what will be saved.
+  - Displayed resolution matches the real resolution of the exported image.
+- **Export**:
+  - Output format by default matches the original file type (`image/jpeg`, `image/png`, `image/webp`).
+  - Filename is edited inline in a text input.
+  - File extension is displayed to the right of the filename (e.g. `.jpg`, `.png`, `.webp`).
+  - The **Save Image** button immediately downloads the file without intermediate modal dialogs.
 - **i18n**:
-  - Поддержка как минимум двух языков: **en** / **ru** (через `i18next` + `react-i18next`).
-  - Переключатель языка в шапке.
+  - At least two locales: **en** and **ru** using `i18next` + `react-i18next`.
+  - Language switcher in the header.
 
 ---
 
@@ -41,13 +41,13 @@
 - **Framework**: React 18 (SPA, Vite)
 - **Language**: TypeScript
 - **Bundler / Dev server**: Vite 5
-- **UI**: shadcn/ui + Radix UI + Tailwind CSS
+- **UI**: shadcn/ui, Radix UI, Tailwind CSS
 - **Cropper**: `react-cropper` + `cropperjs`
 - **State / Forms**: React hooks, `react-hook-form`, `zod`
 - **i18n**: `i18next`, `react-i18next`, `i18next-browser-languagedetector`
 - **Notifications**: `sonner`
 
-Полный список зависимостей см. в `package.json`.
+See `package.json` for the full list of dependencies.
 
 ---
 
@@ -55,8 +55,8 @@
 
 ### Requirements
 
-- Node.js (рекомендуется LTS 18+)
-- npm или совместимый пакетный менеджер (pnpm, yarn – при необходимости адаптируйте команды)
+- Node.js (recommended: LTS 18+)
+- npm or a compatible package manager (pnpm, yarn – adapt commands as needed)
 
 ### Install
 
@@ -70,7 +70,7 @@ npm install
 npm run dev
 ```
 
-По умолчанию Vite поднимает dev‑сервер на `http://localhost:5173` (или другом свободном порту).
+By default, Vite will start a dev server at `http://localhost:5173` (or another available port).
 
 ### Build
 
@@ -78,7 +78,7 @@ npm run dev
 npm run build
 ```
 
-Собранные статические файлы будут в папке `dist/`.
+The production build will be output to the `dist/` directory.
 
 ### Preview (serve production build)
 
@@ -96,27 +96,27 @@ npm run lint
 
 ## Usage
 
-1. Загрузите изображение (drag & drop или кнопкой “Browse Files”).
-2. При необходимости выберите режим соотношения сторон:
-   - `PBC Standard (2:3)` – основной кейс, доступен выбор `Output Size`.
-   - `Free Form` или другие пресеты (16:9, 4:3, 1:1) – рамка фиксируется или свободна, но всегда с `Original Resolution`.
-3. Отмасштабируйте и сдвиньте изображение при помощи зума и drag‑move.
-4. При необходимости поверните изображение кнопкой поворота.
-5. В правой колонке отредактируйте имя файла и убедитесь, что вас устраивает расширение.
-6. Нажмите **Save Image** – файл будет скачан в выбранном формате и с текущим кадрированием.
+1. Upload an image (via drag & drop or the **Browse Files** button).
+2. Choose an aspect ratio if needed:
+   - `PBC Standard (2:3)` – the primary flow, with `Output Size` presets available.
+   - `Free Form` or other presets (16:9, 4:3, 1:1) – the crop box is fixed or flexible, but always uses `Original Resolution`.
+3. Adjust zoom and position using the zoom slider and drag‑to‑move.
+4. Rotate the image in 90° steps if required.
+5. In the right column, edit the filename and confirm that the file extension matches your desired output format.
+6. Click **Save Image** – the file will be downloaded in the current format with the active crop applied.
 
-Все изменения соотношения сторон и размера вывода немедленно отражаются в рамке cropper'а и превью.
+All aspect ratio and Output Size changes are immediately reflected in both the crop box and the preview.
 
 ---
 
 ## Project Guidelines
 
-Для любых инфраструктурных/архитектурных изменений, а также при добавлении новых фич следует руководствоваться:
+For any architectural or feature-level changes, please follow:
 
 - `.windsurf/rules/react.mdc`
 - `.windsurf/rules/tailwind.mdc`
 - `.windsurf/rules/typescript.mdc`
 - [`PROJECT_CONSTITUTION.md`](./PROJECT_CONSTITUTION.md)
 
-Новые возможности не должны ломать основной поток PBC 2:3 и гарантию того, что **превью и сохранённое изображение всегда соответствуют области кадрирования**.
+New features must not break the primary PBC 2:3 flow or the guarantee that the **preview and the saved image always match the crop box**.
 
