@@ -104,6 +104,22 @@ export const ImageCropper = ({
 
     if (!cropper || !isReady) return;
 
+    if (aspectRatio && aspectRatio > 0) {
+      cropper.setAspectRatio(aspectRatio);
+    } else {
+      // Free Form: разблокируем соотношение сторон
+      cropper.setAspectRatio(NaN);
+    }
+
+    updateCroppedImage();
+  }, [aspectRatio, isReady, updateCroppedImage]);
+
+  useEffect(() => {
+    const imageElement: any = cropperRef.current;
+    const cropper = imageElement?.cropper;
+
+    if (!cropper || !isReady) return;
+
     cropper.zoomTo(zoom);
   }, [zoom, isReady]);
 
