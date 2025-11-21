@@ -78,9 +78,8 @@ export const ImageCropper = ({
   }, [onCropResultChange, outputSize, originalImageHeight, aspectRatio]);
 
   const handleCrop = useCallback(() => {
-    if (!isReady) return;
     updateCroppedImage();
-  }, [updateCroppedImage, isReady]);
+  }, [updateCroppedImage]);
 
   useEffect(() => {
     const imageElement: any = cropperRef.current;
@@ -117,9 +116,8 @@ export const ImageCropper = ({
   }, [zoom, isReady]);
 
   useEffect(() => {
-    if (!isReady) return;
     updateCroppedImage();
-  }, [updateCroppedImage, isReady]);
+  }, [updateCroppedImage]);
 
   return (
     <div className="h-full flex flex-col">
