@@ -91,7 +91,8 @@ const Index = () => {
   }, []);
 
   useEffect(() => {
-    if (aspectRatio === 0 && outputSize !== 'original') {
+    const isPbcStandard = aspectRatio === 2 / 3;
+    if (!isPbcStandard && outputSize !== 'original') {
       setOutputSize('original');
     }
   }, [aspectRatio, outputSize]);

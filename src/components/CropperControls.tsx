@@ -34,6 +34,8 @@ export const CropperControls = ({
 }: CropperControlsProps) => {
   const { t } = useTranslation();
 
+  const isPbcStandard = aspectRatio === 2 / 3;
+
   const aspectRatios = [
     { value: 2 / 3, label: t('cropper.pbcStandard') },
     { value: 0, label: t('cropper.freeform') },
@@ -89,7 +91,7 @@ export const CropperControls = ({
           <Select value={outputSize} onValueChange={onOutputSizeChange}>
             <SelectTrigger
               className="bg-control hover:bg-control-hover"
-              disabled={isFreeForm}
+              disabled={!isPbcStandard}
             >
               <SelectValue />
             </SelectTrigger>
@@ -100,7 +102,7 @@ export const CropperControls = ({
                     <SelectItem
                       key={size.value}
                       value={size.value}
-                      disabled={isFreeForm}
+                      disabled={!isPbcStandard}
                     >
                       {size.label}
                     </SelectItem>
@@ -114,7 +116,7 @@ export const CropperControls = ({
                   !Number.isNaN(targetHeight) &&
                   targetHeight > originalImageHeight;
 
-                const isDisabled = isFreeForm || isTooTall;
+                const isDisabled = !isPbcStandard || isTooTall;
                 const label = isTooTall
                   ? `${size.label} ${t('size.unavailable')}`
                   : size.label;

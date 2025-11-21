@@ -30,6 +30,7 @@ export const ImageCropper = ({
 }: ImageCropperProps) => {
   const { t } = useTranslation();
   const [zoom, setZoom] = useState(1);
+  const [baseZoom, setBaseZoom] = useState(1);
   const [isReady, setIsReady] = useState(false);
   const cropperRef = useRef<HTMLImageElement | null>(null);
 
@@ -112,8 +113,8 @@ export const ImageCropper = ({
 
     if (!cropper || !isReady) return;
 
-    cropper.zoomTo(zoom);
-  }, [zoom, isReady]);
+    cropper.zoomTo(baseZoom * zoom);
+  }, [zoom, isReady, baseZoom]);
 
   useEffect(() => {
     updateCroppedImage();
@@ -150,7 +151,8 @@ export const ImageCropper = ({
               }
 
               cropper.zoomTo(initialZoom);
-              setZoom(initialZoom);
+              setBaseZoom(initialZoom);
+              setZoom(1);
             }
 
             setIsReady(true);
