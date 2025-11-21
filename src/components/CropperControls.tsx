@@ -44,11 +44,11 @@ export const CropperControls = ({
 
   const outputSizes = [
     { value: 'original', label: t('size.original') },
-    { value: '1000x1500', label: t('size.1000x1500') },
-    { value: '800x1200', label: t('size.800x1200') },
-    { value: '667x1000', label: t('size.667x1000') },
-    { value: '600x900', label: t('size.600x900') },
     { value: '533x800', label: t('size.533x800') },
+    { value: '600x900', label: t('size.600x900') },
+    { value: '667x1000', label: t('size.667x1000') },
+    { value: '800x1200', label: t('size.800x1200') },
+    { value: '1000x1500', label: t('size.1000x1500') },
     { value: '1200x1800', label: t('size.1200x1800') },
     { value: '1280x1920', label: t('size.1280x1920') },
     { value: '1333x2000', label: t('size.1333x2000') },
