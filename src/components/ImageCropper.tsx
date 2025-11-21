@@ -35,6 +35,7 @@ export const ImageCropper = ({
   const [baseZoom, setBaseZoom] = useState(1);
   const [isReady, setIsReady] = useState(false);
   const cropperRef = useRef<HTMLImageElement | null>(null);
+  const cropDebounceRef = useRef<ReturnType<typeof window.setTimeout> | null>(null);
 
   const updateCroppedImage = useCallback(() => {
     const imageElement: any = cropperRef.current;
@@ -107,6 +108,22 @@ export const ImageCropper = ({
   }, [onCropResultChange, outputSize, originalImageHeight, aspectRatio, outputFormat]);
 
   const handleCrop = useCallback(() => {
+    if (cropDebounceRef.current) {
+      return;
+    }
+
+    cropDebounceRef.current = window.setTimeout(() => {
+      cropDebounceRef.current = null;
+      updateCroppedImage();
+    }, 80);
+  }, [updateCroppedImage]);
+
+  const handleCropEnd = useCallback(() => {
+    if (cropDebounceRef.current) {
+      window.clearTimeout(cropDebounceRef.current);
+      cropDebounceRef.current = null;
+    }
+
     updateCroppedImage();
   }, [updateCroppedImage]);
 
@@ -186,7 +203,7 @@ export const ImageCropper = ({
             setIsReady(true);
           }}
           crop={handleCrop}
-          cropend={handleCrop}
+          cropend={handleCropEnd}
         />
       </div>
       <div className="mt-4 space-y-4 bg-card p-4 rounded-lg">
