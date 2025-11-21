@@ -103,11 +103,22 @@ Follow the existing folder/module structure when adding new files. Do **not** in
 ## 5. Image Cropping Domain Rules
 
 - The **2:3 aspect ratio** is the primary standard and must remain a first-class, well-tested path.
-- Cropping tools should:
-  - Allow users to **move/scale/rotate** the image within a fixed frame.
-  - Provide **intuitive controls** with clear visual feedback.
-  - Avoid unexpected changes to original image quality; cropping and scaling must preserve as much fidelity as practical.
-- Any new feature must respect existing cropping flows and not break the primary use case.
+- Cropping is implemented via **`react-cropper`/`cropperjs`**. The **crop box is the single source of truth** for what will be saved:
+  - The **Cropped Preview** panel and the saved image must always reflect exactly the contents of the crop box (1:1 pixels of the selected area, optionally rescaled by Output Size presets).
+- Aspect ratio modes:
+  - **Fixed presets** (e.g. PBC Standard 2:3, 16:9, 4:3, 1:1) must use a **strict aspect ratio constraint** – crop box resizing is constrained so that the ratio is preserved.
+  - **Free Form** mode must allow the crop box to be resized in any shape (no fixed aspect ratio). Internally this is achieved by passing `NaN` to `setAspectRatio`.
+  - Changing the aspect ratio in the UI must immediately update the crop box and the preview.
+- Output Size behavior:
+  - **`Original Resolution`** means: do **not** resample the cropped area; the output image resolution equals the raw pixel size of the crop box.
+  - Preset sizes (e.g. 533×800, 600×900, 1000×1500, 1200×1800, 1280×1920, 1333×2000, 1400×2100, 1600×2400) may rescale the cropped content to the chosen resolution.
+  - Presets whose **target height exceeds the original image height** must be disabled and marked with a localized “(unavailable)” suffix.
+  - In **Free Form** mode the Output Size selector is disabled and effectively forced to `Original Resolution` to avoid distortion.
+- The cropper must:
+  - Allow users to **move/scale/rotate** the image within the crop box.
+  - Apply an initial **auto-zoom** so that the full image height fits into the crop area container by default, minimizing the need for manual zoom on first load.
+  - Avoid unexpected degradation of image quality; any scaling must be explicit and driven by Output Size presets.
+- Any new feature must respect these rules and must not break the primary PBC 2:3 cropping flow or the guarantee that the preview matches the crop box.
 
 ---
 
