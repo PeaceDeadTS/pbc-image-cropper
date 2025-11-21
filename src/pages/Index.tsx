@@ -152,7 +152,7 @@ const Index = () => {
             </Card>
           </div>
 
-          <div className="lg:col-span-2 space-y-6 flex flex-col max-h-[calc(100vh-180px)]">
+          <div className="lg:col-span-2 space-y-6 flex flex-col max-h-[calc(100vh-180px)] overflow-y-auto">
             <div className="flex-1 min-h-0">
               <PreviewPanel
                 croppedImageUrl={croppedImageUrl}
