@@ -54,13 +54,6 @@ export const ImageCropper = ({
         targetWidth = parsedWidth;
         targetHeight = parsedHeight;
       }
-    } else if (originalImageHeight && originalImageHeight > 0) {
-      const data = cropper.getData();
-      const cropAspect =
-        data && data.height !== 0 ? data.width / data.height : aspectRatio || 1;
-
-      targetHeight = originalImageHeight;
-      targetWidth = Math.round(targetHeight * cropAspect);
     }
 
     const canvasOptions =
