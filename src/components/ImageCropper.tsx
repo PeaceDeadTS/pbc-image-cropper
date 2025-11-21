@@ -164,6 +164,11 @@ export const ImageCropper = ({
   useEffect(() => {
     if (!isReady) return;
 
+    if (cropDebounceRef.current) {
+      window.clearTimeout(cropDebounceRef.current);
+      cropDebounceRef.current = null;
+    }
+
     updateCroppedImage();
   }, [outputSize, isReady, updateCroppedImage]);
 
