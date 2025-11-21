@@ -162,8 +162,10 @@ export const ImageCropper = ({
   }, [zoom, isReady, baseZoom]);
 
   useEffect(() => {
+    if (!isReady) return;
+
     updateCroppedImage();
-  }, [updateCroppedImage]);
+  }, [outputSize, isReady, updateCroppedImage]);
 
   return (
     <div className="h-full flex flex-col">
