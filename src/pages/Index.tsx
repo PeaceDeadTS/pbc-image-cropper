@@ -19,6 +19,8 @@ const Index = () => {
   const [rotation, setRotation] = useState(0);
   const [outputSize, setOutputSize] = useState('original');
   const [filename, setFilename] = useState('Cropped');
+  const [outputExtension, setOutputExtension] = useState('.jpg');
+  const [outputFormat, setOutputFormat] = useState<'image/jpeg' | 'image/png' | 'image/webp'>('image/jpeg');
   const [originalImageSize, setOriginalImageSize] = useState<
     { width: number; height: number } | null
   >(null);
@@ -37,6 +39,17 @@ const Index = () => {
         setOriginalImageSize({ width: img.width, height: img.height });
       };
       img.src = src;
+
+      if (file.type === 'image/png') {
+        setOutputExtension('.png');
+        setOutputFormat('image/png');
+      } else if (file.type === 'image/webp') {
+        setOutputExtension('.webp');
+        setOutputFormat('image/webp');
+      } else {
+        setOutputExtension('.jpg');
+        setOutputFormat('image/jpeg');
+      }
     });
     reader.readAsDataURL(file);
   }, []);
@@ -62,12 +75,12 @@ const Index = () => {
       }
 
       const link = document.createElement('a');
-      link.download = `${filename}.jpg`;
+      link.download = `${filename}${outputExtension}`;
       link.href = croppedImageUrl;
       link.click();
       toast.success(t('messages.saveSuccess'));
     },
-    [croppedImageUrl, filename, t]
+    [croppedImageUrl, filename, outputExtension, t]
   );
 
   const handleReset = useCallback(() => {
@@ -132,6 +145,7 @@ const Index = () => {
                     outputSize={outputSize}
                     onCropResultChange={handleCropResultChange}
                     originalImageHeight={originalImageSize?.height ?? null}
+                    outputFormat={outputFormat}
                   />
                 )}
               </CardContent>
@@ -152,11 +166,7 @@ const Index = () => {
                     onChange={(e) => setFilename(e.target.value)}
                     placeholder={t('actions.defaultName')}
                   />
-                  {finalResolution && (
-                    <span className="text-xs text-muted-foreground">
-                      {finalResolution.width} × {finalResolution.height} {t('size.pixels')}
-                    </span>
-                  )}
+                  <span className="text-xs text-muted-foreground">{outputExtension}</span>
                 </div>
                 <Button onClick={handleSave}>
                   <Download className="h-4 w-4 mr-2" />

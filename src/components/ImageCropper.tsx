@@ -18,6 +18,7 @@ interface ImageCropperProps {
   outputSize: string;
   onCropResultChange: (result: CropResult | null) => void;
   originalImageHeight?: number | null;
+  outputFormat?: 'image/jpeg' | 'image/png' | 'image/webp';
 }
 
 export const ImageCropper = ({
@@ -27,6 +28,7 @@ export const ImageCropper = ({
   outputSize,
   onCropResultChange,
   originalImageHeight,
+  outputFormat,
 }: ImageCropperProps) => {
   const { t } = useTranslation();
   const [zoom, setZoom] = useState(1);
@@ -69,14 +71,19 @@ export const ImageCropper = ({
       return;
     }
 
-    const url = canvas.toDataURL('image/jpeg', 0.95);
+    const mimeType = outputFormat || 'image/jpeg';
+    const quality = mimeType === 'image/png' ? undefined : 0.95;
+    const url =
+      quality != null
+        ? canvas.toDataURL(mimeType, quality)
+        : canvas.toDataURL(mimeType);
 
     onCropResultChange({
       url,
       width: canvas.width,
       height: canvas.height,
     });
-  }, [onCropResultChange, outputSize, originalImageHeight, aspectRatio]);
+  }, [onCropResultChange, outputSize, originalImageHeight, aspectRatio, outputFormat]);
 
   const handleCrop = useCallback(() => {
     updateCroppedImage();
