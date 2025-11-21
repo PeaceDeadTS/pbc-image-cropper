@@ -28,14 +28,14 @@ export const ImageCropper = ({
 }: ImageCropperProps) => {
   const { t } = useTranslation();
   const [zoom, setZoom] = useState(1);
+  const [isReady, setIsReady] = useState(false);
   const cropperRef = useRef<HTMLImageElement | null>(null);
 
   const updateCroppedImage = useCallback(() => {
     const imageElement: any = cropperRef.current;
     const cropper = imageElement?.cropper;
 
-    if (!cropper) {
-      onCropResultChange(null);
+    if (!cropper || !isReady) {
       return;
     }
 
@@ -72,7 +72,7 @@ export const ImageCropper = ({
       width: canvas.width,
       height: canvas.height,
     });
-  }, [onCropResultChange, outputSize]);
+  }, [onCropResultChange, outputSize, isReady]);
 
   const handleCrop = useCallback(() => {
     updateCroppedImage();
@@ -82,19 +82,19 @@ export const ImageCropper = ({
     const imageElement: any = cropperRef.current;
     const cropper = imageElement?.cropper;
 
-    if (!cropper) return;
+    if (!cropper || !isReady) return;
 
     cropper.rotateTo(rotation);
-  }, [rotation]);
+  }, [rotation, isReady]);
 
   useEffect(() => {
     const imageElement: any = cropperRef.current;
     const cropper = imageElement?.cropper;
 
-    if (!cropper) return;
+    if (!cropper || !isReady) return;
 
     cropper.zoomTo(zoom);
-  }, [zoom]);
+  }, [zoom, isReady]);
 
   useEffect(() => {
     updateCroppedImage();
@@ -116,6 +116,10 @@ export const ImageCropper = ({
           checkOrientation={false}
           dragMode="move"
           zoomOnWheel
+          ready={() => {
+            setIsReady(true);
+            updateCroppedImage();
+          }}
           crop={handleCrop}
         />
       </div>
