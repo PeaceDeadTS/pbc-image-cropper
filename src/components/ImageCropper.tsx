@@ -165,6 +165,7 @@ export const ImageCropper = ({
             setIsReady(true);
           }}
           crop={handleCrop}
+          cropend={handleCrop}
         />
       </div>
       <div className="mt-4 space-y-4 bg-card p-4 rounded-lg">
