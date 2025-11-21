@@ -1,6 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Area } from 'react-easy-crop';
 import { Download, RotateCcw } from 'lucide-react';
 import { ImageUploader } from '@/components/ImageUploader';
 import { ImageCropper } from '@/components/ImageCropper';
@@ -12,13 +11,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { getCroppedImg } from '@/utils/cropImage';
 import { toast } from 'sonner';
 
 const Index = () => {
   const { t } = useTranslation();
   const [imageSrc, setImageSrc] = useState<string | null>(null);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
   const [croppedImageUrl, setCroppedImageUrl] = useState<string | null>(null);
   const [aspectRatio, setAspectRatio] = useState(2 / 3);
   const [rotation, setRotation] = useState(0);
@@ -26,6 +23,9 @@ const Index = () => {
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [filename, setFilename] = useState('Cropped');
   const [originalImageSize, setOriginalImageSize] = useState<
+    { width: number; height: number } | null
+  >(null);
+  const [cropResolution, setCropResolution] = useState<
     { width: number; height: number } | null
   >(null);
 
@@ -44,42 +44,19 @@ const Index = () => {
     reader.readAsDataURL(file);
   }, []);
 
-  const handleCropComplete = useCallback(
-    (croppedArea: Area, croppedAreaPixels: Area) => {
-      setCroppedAreaPixels(croppedAreaPixels);
+  const handleCropResultChange = useCallback(
+    (result: { url: string; width: number; height: number } | null) => {
+      if (!result) {
+        setCroppedImageUrl(null);
+        setCropResolution(null);
+        return;
+      }
+
+      setCroppedImageUrl(result.url);
+      setCropResolution({ width: result.width, height: result.height });
     },
     []
   );
-
-  const generateCroppedImage = useCallback(async () => {
-    if (!imageSrc || !croppedAreaPixels) return;
-
-    try {
-      let targetSize: { width: number; height: number } | undefined;
-
-      if (outputSize !== 'original') {
-        const [width, height] = outputSize.split('x').map(Number);
-        targetSize = { width, height };
-      }
-
-      const croppedImage = await getCroppedImg(
-        imageSrc,
-        croppedAreaPixels,
-        rotation,
-        targetSize
-      );
-      setCroppedImageUrl(croppedImage);
-    } catch (e) {
-      console.error(e);
-      toast.error(t('messages.error'));
-    }
-  }, [imageSrc, croppedAreaPixels, rotation, outputSize, t]);
-
-  useEffect(() => {
-    if (imageSrc && croppedAreaPixels) {
-      generateCroppedImage();
-    }
-  }, [imageSrc, croppedAreaPixels, rotation, outputSize, generateCroppedImage]);
 
   const handleSave = useCallback(
     (customFilename?: string) => {
@@ -110,6 +87,7 @@ const Index = () => {
     setOutputSize('original');
     setFilename('Cropped');
     setOriginalImageSize(null);
+    setCropResolution(null);
   }, []);
 
   useEffect(() => {
@@ -118,23 +96,7 @@ const Index = () => {
     }
   }, [aspectRatio, outputSize]);
 
-  let finalWidth: number | null = null;
-  let finalHeight: number | null = null;
-
-  if (outputSize !== 'original') {
-    const [width, height] = outputSize.split('x').map(Number);
-
-    if (!Number.isNaN(width) && !Number.isNaN(height)) {
-      finalWidth = width;
-      finalHeight = height;
-    }
-  } else if (croppedAreaPixels) {
-    finalWidth = Math.round(croppedAreaPixels.width);
-    finalHeight = Math.round(croppedAreaPixels.height);
-  }
-
-  const finalResolution =
-    finalWidth && finalHeight ? { width: finalWidth, height: finalHeight } : null;
+  const finalResolution = cropResolution;
 
   return (
     <div className="min-h-screen bg-background">
@@ -174,8 +136,9 @@ const Index = () => {
                   <ImageCropper
                     imageSrc={imageSrc}
                     aspectRatio={aspectRatio === 0 ? undefined : aspectRatio}
-                    onCropComplete={handleCropComplete}
                     rotation={rotation}
+                    outputSize={outputSize}
+                    onCropResultChange={handleCropResultChange}
                   />
                 )}
               </CardContent>
