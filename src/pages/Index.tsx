@@ -25,11 +25,21 @@ const Index = () => {
   const [outputSize, setOutputSize] = useState('original');
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [filename, setFilename] = useState('Cropped');
+  const [originalImageSize, setOriginalImageSize] = useState<
+    { width: number; height: number } | null
+  >(null);
 
   const handleImageUpload = useCallback((file: File) => {
     const reader = new FileReader();
     reader.addEventListener('load', () => {
-      setImageSrc(reader.result as string);
+      const src = reader.result as string;
+      setImageSrc(src);
+
+      const img = new Image();
+      img.onload = () => {
+        setOriginalImageSize({ width: img.width, height: img.height });
+      };
+      img.src = src;
     });
     reader.readAsDataURL(file);
   }, []);
@@ -99,7 +109,14 @@ const Index = () => {
     setRotation(0);
     setOutputSize('original');
     setFilename('Cropped');
+    setOriginalImageSize(null);
   }, []);
+
+  useEffect(() => {
+    if (aspectRatio === 0 && outputSize !== 'original') {
+      setOutputSize('original');
+    }
+  }, [aspectRatio, outputSize]);
 
   let finalWidth: number | null = null;
   let finalHeight: number | null = null;
@@ -191,6 +208,8 @@ const Index = () => {
               onRotationChange={setRotation}
               outputSize={outputSize}
               onOutputSizeChange={setOutputSize}
+              isFreeForm={aspectRatio === 0}
+              originalImageHeight={originalImageSize?.height ?? null}
             />
           </div>
         </div>

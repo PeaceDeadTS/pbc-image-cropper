@@ -30,8 +30,14 @@
     "667x1000": "667 × 1000 px",
     "600x900": "600 × 900 px",
     "533x800": "533 × 800 px",
+    "1200x1800": "1200 × 1800 px",
+    "1280x1920": "1280 × 1920 px",
+    "1333x2000": "1333 × 2000 px",
+    "1400x2100": "1400 × 2100 px",
+    "1600x2400": "1600 × 2400 px",
     "current": "Final resolution",
-    "pixels": "px"
+    "pixels": "px",
+    "unavailable": "(unavailable)"
   },
   "actions": {
     "save": "Save Image",

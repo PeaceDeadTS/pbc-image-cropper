@@ -18,6 +18,8 @@ interface CropperControlsProps {
   onRotationChange: (rotation: number) => void;
   outputSize: string;
   onOutputSizeChange: (size: string) => void;
+  isFreeForm: boolean;
+  originalImageHeight?: number | null;
 }
 
 export const CropperControls = ({
@@ -27,6 +29,8 @@ export const CropperControls = ({
   onRotationChange,
   outputSize,
   onOutputSizeChange,
+  isFreeForm,
+  originalImageHeight,
 }: CropperControlsProps) => {
   const { t } = useTranslation();
 
@@ -45,6 +49,11 @@ export const CropperControls = ({
     { value: '667x1000', label: t('size.667x1000') },
     { value: '600x900', label: t('size.600x900') },
     { value: '533x800', label: t('size.533x800') },
+    { value: '1200x1800', label: t('size.1200x1800') },
+    { value: '1280x1920', label: t('size.1280x1920') },
+    { value: '1333x2000', label: t('size.1333x2000') },
+    { value: '1400x2100', label: t('size.1400x2100') },
+    { value: '1600x2400', label: t('size.1600x2400') },
   ];
 
   return (
@@ -78,15 +87,48 @@ export const CropperControls = ({
         <div className="space-y-2">
           <Label>{t('size.title')}</Label>
           <Select value={outputSize} onValueChange={onOutputSizeChange}>
-            <SelectTrigger className="bg-control hover:bg-control-hover">
+            <SelectTrigger
+              className="bg-control hover:bg-control-hover"
+              disabled={isFreeForm}
+            >
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {outputSizes.map((size) => (
-                <SelectItem key={size.value} value={size.value}>
-                  {size.label}
-                </SelectItem>
-              ))}
+              {outputSizes.map((size) => {
+                if (size.value === 'original') {
+                  return (
+                    <SelectItem
+                      key={size.value}
+                      value={size.value}
+                      disabled={isFreeForm}
+                    >
+                      {size.label}
+                    </SelectItem>
+                  );
+                }
+
+                const [, heightPart] = size.value.split('x');
+                const targetHeight = Number(heightPart);
+                const isTooTall =
+                  originalImageHeight != null &&
+                  !Number.isNaN(targetHeight) &&
+                  targetHeight > originalImageHeight;
+
+                const isDisabled = isFreeForm || isTooTall;
+                const label = isTooTall
+                  ? `${size.label} ${t('size.unavailable')}`
+                  : size.label;
+
+                return (
+                  <SelectItem
+                    key={size.value}
+                    value={size.value}
+                    disabled={isDisabled}
+                  >
+                    {label}
+                  </SelectItem>
+                );
+              })}
             </SelectContent>
           </Select>
         </div>
