@@ -128,8 +128,8 @@ const Index = () => {
       </header>
 
       <main className="container mx-auto px-4 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-1">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+          <div className="lg:col-span-2">
             <Card className="h-full bg-panel border-panel-border">
               <CardHeader>
                 <CardTitle>{t('cropper.original')}</CardTitle>
@@ -152,7 +152,7 @@ const Index = () => {
             </Card>
           </div>
 
-          <div className="lg:col-span-1 space-y-6">
+          <div className="lg:col-span-2 space-y-6">
             <PreviewPanel
               croppedImageUrl={croppedImageUrl}
               resolution={finalResolution}
