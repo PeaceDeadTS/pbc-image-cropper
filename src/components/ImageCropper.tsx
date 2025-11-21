@@ -37,7 +37,8 @@ export const ImageCropper = ({
     const imageElement: any = cropperRef.current;
     const cropper = imageElement?.cropper;
 
-    if (!cropper || !isReady) {
+    if (!cropper) {
+      onCropResultChange(null);
       return;
     }
 
@@ -81,11 +82,12 @@ export const ImageCropper = ({
       width: canvas.width,
       height: canvas.height,
     });
-  }, [onCropResultChange, outputSize, isReady]);
+  }, [onCropResultChange, outputSize, originalImageHeight, aspectRatio]);
 
   const handleCrop = useCallback(() => {
+    if (!isReady) return;
     updateCroppedImage();
-  }, [updateCroppedImage]);
+  }, [updateCroppedImage, isReady]);
 
   useEffect(() => {
     const imageElement: any = cropperRef.current;
@@ -106,8 +108,9 @@ export const ImageCropper = ({
   }, [zoom, isReady]);
 
   useEffect(() => {
+    if (!isReady) return;
     updateCroppedImage();
-  }, [updateCroppedImage]);
+  }, [updateCroppedImage, isReady]);
 
   return (
     <div className="h-full flex flex-col">
@@ -126,8 +129,24 @@ export const ImageCropper = ({
           dragMode="move"
           zoomOnWheel
           ready={() => {
+            const imageElement: any = cropperRef.current;
+            const cropper = imageElement?.cropper;
+
+            if (cropper) {
+              const containerData = cropper.getContainerData();
+              const imageData = cropper.getImageData();
+
+              let initialZoom = 1;
+
+              if (imageData.naturalHeight > 0) {
+                initialZoom = containerData.height / imageData.naturalHeight;
+              }
+
+              cropper.zoomTo(initialZoom);
+              setZoom(initialZoom);
+            }
+
             setIsReady(true);
-            updateCroppedImage();
           }}
           crop={handleCrop}
         />
