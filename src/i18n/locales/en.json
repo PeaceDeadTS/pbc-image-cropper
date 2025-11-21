@@ -1,0 +1,54 @@
+{
+  "app": {
+    "title": "PBC Image Cropper",
+    "subtitle": "Professional image cropping tool"
+  },
+  "upload": {
+    "title": "Upload Image",
+    "dragDrop": "Drag & drop your image here",
+    "or": "or",
+    "browse": "Browse Files",
+    "supported": "Supported formats: JPG, PNG, WEBP"
+  },
+  "cropper": {
+    "original": "Original Image",
+    "preview": "Cropped Preview",
+    "zoom": "Zoom",
+    "rotate": "Rotate",
+    "aspectRatio": "Aspect Ratio",
+    "pbcStandard": "PBC Standard (2:3)",
+    "freeform": "Free Form",
+    "preset16-9": "16:9 (Widescreen)",
+    "preset4-3": "4:3 (Standard)",
+    "preset1-1": "1:1 (Square)"
+  },
+  "size": {
+    "title": "Output Size",
+    "original": "Original Resolution",
+    "1000x1500": "1000 × 1500 px",
+    "800x1200": "800 × 1200 px",
+    "667x1000": "667 × 1000 px",
+    "600x900": "600 × 900 px",
+    "533x800": "533 × 800 px"
+  },
+  "actions": {
+    "save": "Save Image",
+    "quickSave": "Quick Save",
+    "reset": "Reset",
+    "cancel": "Cancel",
+    "filename": "Filename",
+    "defaultName": "Cropped"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "quality": "Image Quality",
+    "format": "Output Format"
+  },
+  "messages": {
+    "uploadSuccess": "Image uploaded successfully",
+    "saveSuccess": "Image saved successfully",
+    "error": "An error occurred",
+    "selectImage": "Please select an image first"
+  }
+}
