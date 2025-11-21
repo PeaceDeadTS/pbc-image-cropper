@@ -101,6 +101,24 @@ const Index = () => {
     setFilename('Cropped');
   }, []);
 
+  let finalWidth: number | null = null;
+  let finalHeight: number | null = null;
+
+  if (outputSize !== 'original') {
+    const [width, height] = outputSize.split('x').map(Number);
+
+    if (!Number.isNaN(width) && !Number.isNaN(height)) {
+      finalWidth = width;
+      finalHeight = height;
+    }
+  } else if (croppedAreaPixels) {
+    finalWidth = Math.round(croppedAreaPixels.width);
+    finalHeight = Math.round(croppedAreaPixels.height);
+  }
+
+  const finalResolution =
+    finalWidth && finalHeight ? { width: finalWidth, height: finalHeight } : null;
+
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-10">
@@ -111,23 +129,14 @@ const Index = () => {
           </div>
           <div className="flex items-center gap-2">
             {imageSrc && (
-              <>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={handleReset}
-                  title={t('actions.reset')}
-                >
-                  <RotateCcw className="h-5 w-5" />
-                </Button>
-                <Button variant="secondary" onClick={handleQuickSave}>
-                  {t('actions.quickSave')}
-                </Button>
-                <Button onClick={() => setShowSaveDialog(true)}>
-                  <Download className="h-4 w-4 mr-2" />
-                  {t('actions.save')}
-                </Button>
-              </>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleReset}
+                title={t('actions.reset')}
+              >
+                <RotateCcw className="h-5 w-5" />
+              </Button>
             )}
             <LanguageSwitcher />
           </div>
@@ -147,7 +156,7 @@ const Index = () => {
                 ) : (
                   <ImageCropper
                     imageSrc={imageSrc}
-                    aspectRatio={aspectRatio || 1}
+                    aspectRatio={aspectRatio === 0 ? undefined : aspectRatio}
                     onCropComplete={handleCropComplete}
                     rotation={rotation}
                   />
@@ -157,7 +166,21 @@ const Index = () => {
           </div>
 
           <div className="lg:col-span-1 space-y-6">
-            <PreviewPanel croppedImageUrl={croppedImageUrl} />
+            <PreviewPanel
+              croppedImageUrl={croppedImageUrl}
+              resolution={finalResolution}
+            />
+            {imageSrc && (
+              <div className="flex items-center justify-end gap-2">
+                <Button variant="secondary" onClick={handleQuickSave}>
+                  {t('actions.quickSave')}
+                </Button>
+                <Button onClick={() => setShowSaveDialog(true)}>
+                  <Download className="h-4 w-4 mr-2" />
+                  {t('actions.save')}
+                </Button>
+              </div>
+            )}
           </div>
 
           <div className="lg:col-span-1">

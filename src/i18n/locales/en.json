@@ -29,7 +29,9 @@
     "800x1200": "800 × 1200 px",
     "667x1000": "667 × 1000 px",
     "600x900": "600 × 900 px",
-    "533x800": "533 × 800 px"
+    "533x800": "533 × 800 px",
+    "current": "Final resolution",
+    "pixels": "px"
   },
   "actions": {
     "save": "Save Image",

@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 
 interface ImageCropperProps {
   imageSrc: string;
-  aspectRatio: number;
+  aspectRatio?: number;
   onCropComplete: (croppedArea: Area, croppedAreaPixels: Area) => void;
   rotation: number;
 }
