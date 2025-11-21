@@ -139,6 +139,7 @@ const Index = () => {
                     rotation={rotation}
                     outputSize={outputSize}
                     onCropResultChange={handleCropResultChange}
+                    originalImageHeight={originalImageSize?.height ?? null}
                   />
                 )}
               </CardContent>
