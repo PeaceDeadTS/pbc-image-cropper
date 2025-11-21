@@ -1,73 +1,122 @@
-# Welcome to your Lovable project
+# PBC Image Cropper
 
-## Project info
+**Image Cropper for PBC** – web‑приложение для профессиональной обрезки изображений по стандарту PBC с фиксированным соотношением сторон 2:3, поддержкой других пресетов, зума, поворота и удобного экспорта.
 
-**URL**: https://lovable.dev/projects/83b66cfb-35b7-4a3a-ba0f-24bff07c3111
+Приложение полностью клиентское (SPA на React + Vite) и готово к деплою как статический сайт.
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## Features
 
-**Use Lovable**
+- **PBC Standard (2:3)** – основной сценарий, с жёстким ограничением соотношения сторон и поддержкой пресетов `Output Size`.
+- **Другие соотношения**:
+  - 16:9, 4:3, 1:1 – фиксированные пресеты.
+  - Free Form – произвольная рамка (соотношение не фиксировано).
+- **Output Size**:
+  - Пресеты доступны **только** в режиме PBC Standard (2:3).
+  - Во всех остальных режимах всегда используется `Original Resolution`, селектор размера отключён.
+  - Пресеты, у которых целевая высота больше исходной высоты изображения, отключены и помечены `(unavailable)`.
+- **Zoom & панорамирование**:
+  - Авто‑зу́м при загрузке – по высоте контейнера, чтобы изображение целиком помещалось по вертикали.
+  - Слайдер зума регулирует масштаб **относительно базового авто‑зума**, давая плавное управление без резких скачков.
+  - Перемещение изображения внутри рамки (drag‑to‑move).
+- **Поворот**:
+  - Кнопка поворота на +90° (циклически 0 → 90 → 180 → 270 → 0).
+- **Превью и финальное разрешение**:
+  - Панель `Cropped Preview` показывает результат кадрирования.
+  - Подпресчитанное разрешение результата соответствует реальному экспортируемому изображению.
+- **Экспорт**:
+  - Формат вывода по умолчанию совпадает с исходным файлом (`image/jpeg`, `image/png`, `image/webp`).
+  - Имя файла редактируется inline в текстовом поле.
+  - Справа от имени отображается расширение файла (`.jpg`, `.png`, `.webp`).
+  - Кнопка `Save Image` сразу скачивает файл без дополнительных модальных окон.
+- **i18n**:
+  - Поддержка как минимум двух языков: **en** / **ru** (через `i18next` + `react-i18next`).
+  - Переключатель языка в шапке.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/83b66cfb-35b7-4a3a-ba0f-24bff07c3111) and start prompting.
+---
 
-Changes made via Lovable will be committed automatically to this repo.
+## Tech Stack
 
-**Use your preferred IDE**
+- **Framework**: React 18 (SPA, Vite)
+- **Language**: TypeScript
+- **Bundler / Dev server**: Vite 5
+- **UI**: shadcn/ui + Radix UI + Tailwind CSS
+- **Cropper**: `react-cropper` + `cropperjs`
+- **State / Forms**: React hooks, `react-hook-form`, `zod`
+- **i18n**: `i18next`, `react-i18next`, `i18next-browser-languagedetector`
+- **Notifications**: `sonner`
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Полный список зависимостей см. в `package.json`.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+---
 
-Follow these steps:
+## Getting Started
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Requirements
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+- Node.js (рекомендуется LTS 18+)
+- npm или совместимый пакетный менеджер (pnpm, yarn – при необходимости адаптируйте команды)
 
-# Step 3: Install the necessary dependencies.
-npm i
+### Install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+```bash
+npm install
+```
+
+### Development
+
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+По умолчанию Vite поднимает dev‑сервер на `http://localhost:5173` (или другом свободном порту).
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Build
 
-**Use GitHub Codespaces**
+```bash
+npm run build
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Собранные статические файлы будут в папке `dist/`.
 
-## What technologies are used for this project?
+### Preview (serve production build)
 
-This project is built with:
+```bash
+npm run preview
+```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### Lint
 
-## How can I deploy this project?
+```bash
+npm run lint
+```
 
-Simply open [Lovable](https://lovable.dev/projects/83b66cfb-35b7-4a3a-ba0f-24bff07c3111) and click on Share -> Publish.
+---
 
-## Can I connect a custom domain to my Lovable project?
+## Usage
 
-Yes, you can!
+1. Загрузите изображение (drag & drop или кнопкой “Browse Files”).
+2. При необходимости выберите режим соотношения сторон:
+   - `PBC Standard (2:3)` – основной кейс, доступен выбор `Output Size`.
+   - `Free Form` или другие пресеты (16:9, 4:3, 1:1) – рамка фиксируется или свободна, но всегда с `Original Resolution`.
+3. Отмасштабируйте и сдвиньте изображение при помощи зума и drag‑move.
+4. При необходимости поверните изображение кнопкой поворота.
+5. В правой колонке отредактируйте имя файла и убедитесь, что вас устраивает расширение.
+6. Нажмите **Save Image** – файл будет скачан в выбранном формате и с текущим кадрированием.
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+Все изменения соотношения сторон и размера вывода немедленно отражаются в рамке cropper'а и превью.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+---
+
+## Project Guidelines
+
+Для любых инфраструктурных/архитектурных изменений, а также при добавлении новых фич следует руководствоваться:
+
+- `.windsurf/rules/react.mdc`
+- `.windsurf/rules/tailwind.mdc`
+- `.windsurf/rules/typescript.mdc`
+- [`PROJECT_CONSTITUTION.md`](./PROJECT_CONSTITUTION.md)
+
+Новые возможности не должны ломать основной поток PBC 2:3 и гарантию того, что **превью и сохранённое изображение всегда соответствуют области кадрирования**.
+
