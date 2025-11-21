@@ -128,13 +128,13 @@ const Index = () => {
       </header>
 
       <main className="container mx-auto px-4 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-          <div className="lg:col-span-2">
-            <Card className="h-full bg-panel border-panel-border">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-start">
+          <div className="lg:col-span-2 flex flex-col max-h-[calc(100vh-220px)]">
+            <Card className="bg-panel border-panel-border flex-1 flex flex-col">
               <CardHeader>
                 <CardTitle>{t('cropper.original')}</CardTitle>
               </CardHeader>
-              <CardContent className="h-[calc(100%-80px)]">
+              <CardContent className="flex-1 min-h-0">
                 {!imageSrc ? (
                   <ImageUploader onImageUpload={handleImageUpload} />
                 ) : (
@@ -152,11 +152,13 @@ const Index = () => {
             </Card>
           </div>
 
-          <div className="lg:col-span-2 space-y-6">
-            <PreviewPanel
-              croppedImageUrl={croppedImageUrl}
-              resolution={finalResolution}
-            />
+          <div className="lg:col-span-2 space-y-6 flex flex-col max-h-[calc(100vh-220px)]">
+            <div className="flex-1 min-h-0 overflow-auto">
+              <PreviewPanel
+                croppedImageUrl={croppedImageUrl}
+                resolution={finalResolution}
+              />
+            </div>
             {imageSrc && (
               <div className="flex flex-col items-end gap-2">
                 <div className="flex items-center gap-2 w-full">
