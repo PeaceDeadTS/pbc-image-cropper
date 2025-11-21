@@ -84,6 +84,12 @@ Follow the existing folder/module structure when adding new files. Do **not** in
 - Use **TailwindCSS** utility classes for styling, following `.windsurf/rules/tailwind.mdc`.
 - For variant-heavy components, use **`class-variance-authority`** and `tailwind-merge`.
 - Keep layout utilities and spacing consistent; avoid hardcoded arbitrary values when shared tokens/utilities are available.
+- The main cropper workspace uses the Tailwind `container` with a **wider 2xl width (≈1600px)** to reduce excessive side gutters on large (e.g., 2K) displays while still keeping the content centered.
+- The primary cropper layout is a **responsive grid**:
+  - Mobile / small viewports: single-column flow (Original Image → Cropped Preview → Settings) for readability.
+  - Desktop (`lg` and above): a 5-column grid split as **2 + 2 + 1** (Original Image – 2/5, Cropped Preview – 2/5, Settings – 1/5) so that image panels get most of the horizontal space.
+- Vertical sizing of the Original Image and Cropped Preview panels should be **bounded by the viewport height** (e.g., using a `max-height` based on `100vh` minus header and paddings) to avoid overly tall panels on large screens.
+- Prefer page-level scrolling over nested scrollbars inside the Original Image or Cropped Preview panels; inner scrollbars should be avoided unless there is a very strong UX reason.
 
 ### 4.4 React & Components
 
