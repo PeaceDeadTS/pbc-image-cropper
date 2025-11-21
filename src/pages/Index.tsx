@@ -8,9 +8,7 @@ import { PreviewPanel } from '@/components/PreviewPanel';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { toast } from 'sonner';
 
 const Index = () => {
@@ -20,7 +18,6 @@ const Index = () => {
   const [aspectRatio, setAspectRatio] = useState(2 / 3);
   const [rotation, setRotation] = useState(0);
   const [outputSize, setOutputSize] = useState('original');
-  const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [filename, setFilename] = useState('Cropped');
   const [originalImageSize, setOriginalImageSize] = useState<
     { width: number; height: number } | null
@@ -58,26 +55,20 @@ const Index = () => {
     []
   );
 
-  const handleSave = useCallback(
-    (customFilename?: string) => {
+  const handleSave = useCallback(() => {
       if (!croppedImageUrl) {
         toast.error(t('messages.selectImage'));
         return;
       }
 
       const link = document.createElement('a');
-      link.download = `${customFilename || filename}.jpg`;
+      link.download = `${filename}.jpg`;
       link.href = croppedImageUrl;
       link.click();
       toast.success(t('messages.saveSuccess'));
-      setShowSaveDialog(false);
     },
     [croppedImageUrl, filename, t]
   );
-
-  const handleQuickSave = useCallback(() => {
-    handleSave(t('actions.defaultName'));
-  }, [handleSave, t]);
 
   const handleReset = useCallback(() => {
     setImageSrc(null);
@@ -153,11 +144,21 @@ const Index = () => {
               resolution={finalResolution}
             />
             {imageSrc && (
-              <div className="flex items-center justify-end gap-2">
-                <Button variant="secondary" onClick={handleQuickSave}>
-                  {t('actions.quickSave')}
-                </Button>
-                <Button onClick={() => setShowSaveDialog(true)}>
+              <div className="flex flex-col items-end gap-2">
+                <div className="flex items-center gap-2">
+                  <Input
+                    className="w-40 md:w-48"
+                    value={filename}
+                    onChange={(e) => setFilename(e.target.value)}
+                    placeholder={t('actions.defaultName')}
+                  />
+                  {finalResolution && (
+                    <span className="text-xs text-muted-foreground">
+                      {finalResolution.width} × {finalResolution.height} {t('size.pixels')}
+                    </span>
+                  )}
+                </div>
+                <Button onClick={handleSave}>
                   <Download className="h-4 w-4 mr-2" />
                   {t('actions.save')}
                 </Button>
@@ -179,33 +180,6 @@ const Index = () => {
           </div>
         </div>
       </main>
-
-      <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{t('actions.save')}</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="filename">{t('actions.filename')}</Label>
-              <Input
-                id="filename"
-                value={filename}
-                onChange={(e) => setFilename(e.target.value)}
-                placeholder={t('actions.defaultName')}
-              />
-            </div>
-            <div className="flex gap-2 justify-end">
-              <Button variant="outline" onClick={() => setShowSaveDialog(false)}>
-                {t('actions.cancel')}
-              </Button>
-              <Button onClick={() => handleSave(filename)}>
-                {t('actions.save')}
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };

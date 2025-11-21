@@ -1,7 +1,7 @@
 {
   "app": {
     "title": "PBC Image Cropper",
-    "subtitle": "Professional image cropping tool"
+    "subtitle": "Image Cropper for PBC"
   },
   "upload": {
     "title": "Upload Image",
