@@ -159,9 +159,9 @@ const Index = () => {
             />
             {imageSrc && (
               <div className="flex flex-col items-end gap-2">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 w-full">
                   <Input
-                    className="w-40 md:w-48"
+                    className="flex-1 min-w-0"
                     value={filename}
                     onChange={(e) => setFilename(e.target.value)}
                     placeholder={t('actions.defaultName')}
