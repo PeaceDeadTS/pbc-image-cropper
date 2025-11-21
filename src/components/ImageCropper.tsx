@@ -71,17 +71,38 @@ export const ImageCropper = ({
       return;
     }
 
+    let outputCanvas: HTMLCanvasElement = canvas;
+
+    if (
+      targetWidth != null &&
+      targetHeight != null &&
+      (canvas.width !== targetWidth || canvas.height !== targetHeight)
+    ) {
+      const fixedCanvas = document.createElement('canvas');
+      fixedCanvas.width = targetWidth;
+      fixedCanvas.height = targetHeight;
+
+      const ctx = fixedCanvas.getContext('2d');
+
+      if (ctx) {
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(canvas, 0, 0, targetWidth, targetHeight);
+        outputCanvas = fixedCanvas;
+      }
+    }
+
     const mimeType = outputFormat || 'image/jpeg';
     const quality = mimeType === 'image/png' ? undefined : 0.95;
     const url =
       quality != null
-        ? canvas.toDataURL(mimeType, quality)
-        : canvas.toDataURL(mimeType);
+        ? outputCanvas.toDataURL(mimeType, quality)
+        : outputCanvas.toDataURL(mimeType);
 
     onCropResultChange({
       url,
-      width: canvas.width,
-      height: canvas.height,
+      width: outputCanvas.width,
+      height: outputCanvas.height,
     });
   }, [onCropResultChange, outputSize, originalImageHeight, aspectRatio, outputFormat]);
 
